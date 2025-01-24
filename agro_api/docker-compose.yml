@@ -1,0 +1,20 @@
+services:
+  agro_api:
+    restart: "no"
+    build:
+      context: /home/user/Documentos/EARTH_PIXEL/agro_api
+      dockerfile: DOCKERFILE
+    command: python manage.py runserver 0.0.0.0:8000  # Comando para iniciar Django
+    volumes:
+      - ./:/usr/src/app  # Monta el proyecto local en el contenedor
+    ports:
+      - 127.0.0.1:8000:8000  # Asigna el puerto local 8000 al contenedor
+    env_file:
+      - .env.dev  # Variables de entorno (si tienes estos archivos configurados)
+    networks:
+      - postgis_postgis  # Conecta el servicio a la red de PostGIS
+
+networks:
+   postgis_postgis:
+      driver: bridge
+      external: true  # Usa la red existente "postgis_postgis"

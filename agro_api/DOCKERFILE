@@ -1,0 +1,34 @@
+# 1. Usa una imagen base oficial de Python
+FROM python:3.12-alpine
+
+# 2. Configura el directorio de trabajo dentro del contenedor
+WORKDIR /usr/src/app
+
+# 3. Variables de entorno
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# 4. Instala las dependencias del sistema
+RUN apk update && apk add --no-cache \
+    gdal-dev \
+    geos-dev \
+    postgresql-dev \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    python3-dev
+
+# 5. Copia el archivo de requerimientos
+COPY requirements.txt .
+
+# 6. Instala las dependencias de Python
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# 7. Copia todo el código fuente al contenedor
+COPY . .
+
+# 8. Expone el puerto en el que correrá Django
+EXPOSE 8000
+
+# 9. Comando para iniciar el servidor
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

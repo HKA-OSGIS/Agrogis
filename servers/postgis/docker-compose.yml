@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    restart: "no"
+    ports:
+      - "5433:5432" # Cambiar si deseas otro puerto
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gis
+    networks:
+      - postgis_postgis
+    volumes:
+      - ./postgis_data:/var/lib/postgresql/data
+
+networks:
+  postgis_postgis:
+    external: true

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Management System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .auth-container {
+            display: none;
+        }
+        
+        .main-container {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        #map {
+            height: 500px;
+            width: 50%;
+            background-color: #f0f0f0;
+            border-radius: 0.5rem;
+        }
+        
+        .quick-links {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            z-index: 1000;
+        }
+
+        .quick-links a {
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .quick-links img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .quick-links a:hover {
+            transform: scale(1.05);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            margin-top: 0.25rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .chart {
+            flex: 1;
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Auth Container -->
+    <div class="auth-container active" id="authContainer">
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="bg-white p-8 rounded-lg shadow-md w-96">
+                <h1>AGROGIS</h1>
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Plot Management System</h2>
+                <form id="form-login" onsubmit="event.preventDefault();" class="space-y-4">
+                    <div class="form-group">
+                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="username" name="username" required minlength="4" maxlength="50" 
+                               class="form-control" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="password" name="password" required minlength="4" maxlength="50" 
+                               class="form-control" placeholder="Enter password">
+                    </div>
+                    <input type="hidden" id="result" name="result">
+                    <p id="form-login-message" class="text-sm text-red-500"></p>
+                    <div class="flex space-x-2">
+                        <button id="button-login" class="btn btn-primary flex-1">Login</button>
+                        <button id="button-logout" class="btn btn-danger flex-1">Logout</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container p-6" id="mainContainer">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Buildings Form -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800">PLot Management</h2>
+                    <form id="form-buildings" onsubmit="event.preventDefault();" class="space-y-4">
+                        <div class="form-group">
+                            <label for="form-buildings-gid" class="block text-sm font-medium text-gray-700">GID</label>
+                            <input type="text" id="form-buildings-gid" name="form-buildings-gid" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="form-buildings-descripcion" class="block text-sm font-medium text-gray-700">Description</label>
+                            <textarea id="form-buildings-descripcion" name="descripcion" rows="3" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="form-buildings-area" class="block text-sm font-medium text-gray-700">Area</label>
+                            <input type="text" id="form-buildings-area" name="form-buildings-area" disabled class="form-control bg-gray-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="form-buildings-geomWkt" class="block text-sm font-medium text-gray-700">Geometry WKT</label>
+                            <textarea id="form-buildings-geomWkt" name="geomWkt" rows="3" class="form-control">polygon((0 0, 1 0, 1 1, 0 1, 0 0))</textarea>
+                        </div>
+                        <p id="form-buildings-message" class="text-sm text-red-500"></p>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="form-building-insert" class="btn btn-primary">Insert</button>
+                            <button id="form-building-update" class="btn btn-primary">Update</button>
+                            <button id="form-building-delete" class="btn btn-danger">Delete</button>
+                            <button id="form-building-select" class="btn btn-primary">Select</button>
+                        </div>
+                    </form>
+                </div>
+              
+
+                <!-- Map Container -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800">Map View</h2>
+                    <div id="map" class="mb-4"></div>
+                    <p id="map-message" class="text-sm text-gray-600 mb-4"></p>
+                    <div class="flex flex-wrap gap-2">
+                        <button id="start-drawing-building" class="btn btn-primary">Start Drawing</button>
+                        <button id="stop-drawing-building" class="btn btn-danger">Stop Drawing</button>
+                        <button id="reload-wms-buildings-layer" class="btn btn-primary">Reload WMS Layer</button>
+                        <button id="clear-vector-buildings-layer" class="btn btn-primary">Clear Vector Layer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container mt-6">
+                <div class="chart">
+                    <h3 class="text-lg font-bold mb-4 text-gray-800">NDVI</h3>
+                    <button id="update-ndvi-btn" class="btn btn-primary mb-4 text-sm px-3 py-2">
+                        Actualizar NDVI
+                    </button>
+                    <canvas id="ndvi-chart"></canvas>
+                </div>
+                
+                <div class="chart fixed-chart">
+                    <h3 class="text-lg font-bold mb-4 text-gray-800">Weather</h3>
+                    
+                    <button id="update-weather-btn" class="btn btn-primary mb-4 text-sm px-3 py-2">
+                        Actualizar Clima
+                    </button>
+                    
+                    <canvas id="weather-chart"></canvas>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <a href="http://localhost:8080/geoserver" target="_blank" title="GeoServer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/GeoServer_logo.svg/1024px-GeoServer_logo.svg.png" alt="GeoServer">
+            </a>
+            <a href="http://localhost:5050" target="_blank" title="pgAdmin">
+                <img src="https://www.pgadmin.org/static/docs/pgadmin4/_images/pgAdmin.png" alt="pgAdmin">
+            </a>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+    <script>
+        // Basic authentication logic
+        document.getElementById('button-login').addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                document.getElementById('authContainer').classList.remove('active');
+                document.getElementById('mainContainer').classList.add('active');
+            } else {
+                document.getElementById('form-login-message').textContent = 'Please enter valid credentials';
+            }
+        });
+
+        document.getElementById('button-logout').addEventListener('click', () => {
+            document.getElementById('mainContainer').classList.remove('active');
+            document.getElementById('authContainer').classList.add('active');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        });
+
+        // Initialize chart canvases
+        const ndviChart = new Chart(document.getElementById('ndvi-chart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'NDVI',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: '#3b82f6',
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false,
+                        text: 'NDVI'
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

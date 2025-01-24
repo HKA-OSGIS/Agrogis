@@ -1,0 +1,16 @@
+<layer>
+  <name>plots</name>
+  <id>LayerInfoImpl-52e07dbd:19493ef55c1:-7ffa</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fe0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-52e07dbd:19493ef55c1:-7ffb</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2025-01-23 16:33:02.53 UTC</dateCreated>
+</layer>

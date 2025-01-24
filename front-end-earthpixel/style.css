@@ -1,0 +1,129 @@
+@import "node_modules/ol/ol.css";
+/*You can divide the styles in several css and latter
+import them here*/
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+/*Align items with flexbox*/
+.container-exterior{
+  /*Defines the element as flexbox container --> display: flex;
+    https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+  */
+  display: flex;
+  flex-direction: column;
+  /*Background color*/
+  background-color: antiquewhite;
+  align-items: center;
+}
+
+.container-interior-forms{
+  display: flex;
+  flex-direction: column;
+  /*Elements in this container are centered --> IN THE HORIZONTAL AXYS,
+  as flex-direction is column. Here yoy must use aling-items to center items,
+  not justify-content.*/
+  align-items: center;
+
+}
+
+.container-interior-map{
+  display: flex;
+  flex-direction: column;
+  /*Elements in this container are centered --> IN THE HORIZONTAL AXYS,
+  as flex-direction is column. Here yoy must use aling-items to center items,
+  not justify-content.*/
+  align-items: center;
+  width: 100%;
+}
+
+form {width: 100%;}
+input, textarea{width: 95%;}
+
+/*It's applied on screens less than 400px */
+@media only screen and (max-width:400px) {
+  .container-interior-forms {width:100%; background-color: lightblue;}
+}
+
+/*It's applied on screens bigger than 400px and less than 600px*/
+@media only screen and (min-width: 400px) and ( max-width: 600px) {
+  .container-interior-forms {width:90%; background-color: rgb(211, 25, 180);}
+}
+/*It's applied on screens bigger than 600px and less than 1000px*/
+@media only screen and (min-width: 600px) and (max-width: 1000px){
+  .container-interior-forms {width:70%; background-color: rgb(31, 211, 25);}
+}
+/*It's applied on screens bigger 1000px*/
+@media only screen and (min-width: 1000px) {
+  .container-interior-forms {width:600px; background-color: rgb(211, 25, 96);}
+}
+
+.form-login-button-container{
+  display: flex;
+  justify-content: center;
+}
+
+button{margin-right: 10px;}
+
+/**El mapa ocupa el 100% de su contenedor, el div .container-interior*/
+#map {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  width: 100%;
+  height: 500px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  /*Elements in this container are centered --> IN THE HORIZONTAL AXYS,
+  as flex-direction is column. Here yoy must use aling-items to center items,
+  not justify-content.*/
+  align-items: center;
+  width: 100%;
+}
+
+.fixed-chart {
+  max-width: 700px;
+  height: 600px;  /* Ajusta el alto según sea necesario */
+  padding-bottom: 50px; /* Espacio adicional debajo del gráfico */
+  overflow: hidden;  /* Evita que el contenido sobresalga */
+  margin: 0 auto;
+  position: relative;
+}
+
+
+
+
+
+canvas {
+  display: block;  /* Evita el margen interno del canvas */
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-height: 450px; /* Aumenta la altura máxima */
+  overflow: visible;  /* Permite mostrar contenido extra */
+}
+
+.chart {
+  flex: 1;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  max-height: 400px;  /* Aumenta la altura para que quepan las fechas */
+  overflow: visible;   /* Evita que se recorten los ejes */
+}
+
+canvas {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  height: auto !important;
+  padding-bottom: 30px; /* Agrega espacio extra debajo del gráfico */
+}

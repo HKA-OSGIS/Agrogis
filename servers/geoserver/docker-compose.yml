@@ -1,0 +1,16 @@
+services:
+  geoserver:
+    image: docker.osgeo.org/geoserver:2.24.2
+    restart: "no"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./geoserver_data:/opt/geoserver_data/:Z
+      - ./additional_libs:/opt/additional_libs:Z
+    networks:
+      - postgis_postgis
+
+networks:
+  postgis_postgis:
+    driver: bridge
+    external: true
