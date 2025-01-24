@@ -16,7 +16,7 @@ setMAP_MAIN(new MapMain());
 // Variables de la API de clima
 const WEATHER_API_URL = 'https://api.agromonitoring.com/agro/1.0/weather';
 const NDVI_API_URL = 'https://api.agromonitoring.com/agro/1.0/ndvi/history';
-const API_KEY = 'a597344f0250c0b03aaa704f7ec99eaf';
+const API_KEY = 'xxxxx';
 
 // Parámetros de la parcela
 const lat = 35;
